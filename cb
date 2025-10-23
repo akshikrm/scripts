@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+FRONTEND="$HOME/Developer/city-beach"
+BACKEND_AUTH="$HOME/Developer/DialogFlow/src/webhooks/auth-service"
+BACKEND_PLP="$HOME/Developer/DialogFlow/src/webhooks/ecommbrowser"
+BACKEND_PDP="$HOME/Developer/DialogFlow/src/webhooks/ecommproduct"
+
+create_session(){
+
+	local name=$1
+	local path=$2
+	local cmd=$3
+
+	if ! tmux has-session -t "${name}" 2>/dev/null; then
+		tmux new-session -d -s "${name}" -n "editor" -c "$path"
+		tmux send-keys -t "${name}" "nvim" C-m
+		tmux new-window -t "${name}" -n "server" -c "$path"
+		tmux send-keys -t "${name}:server" "$cmd" C-m
+		tmux select-window -t "${name}:editor"
+	fi
+
+}
+
+create_session "frontend" "$FRONTEND" "npm run dev"
+create_session "auth" "$BACKEND_AUTH" "npm run dev"
+create_session "plp" "$BACKEND_PLP" "npm run dev"
+create_session "pdp" "$BACKEND_PDP" "npm run dev"
+
+tmux attach -t "frontend"
