@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+NOTES_DIR=$HOME/Notes
+
+cd "$NOTES_DIR"
+
+echo "switching to $NOTES_DIR"
+echo "staging changes"
+
+git add .
+
+echo "changes staged"
+
+echo "preparing to commit"
+
+timestamp=$(date +"%Y-%m-%d %H:%M")
+
+git commit -m "Notes update: $timestamp"
+
+echo "comitted"
+
+
+
+
+
